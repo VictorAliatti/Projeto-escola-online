@@ -1,0 +1,135 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
+    line-height: 1.6
+}
+
+/* Um "container" para centralizar o conteúdo */
+.container {
+    width: 90%;
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Cabeçalho e Navegação */
+header {
+    background-color: #0056b3;
+    color: white;
+    padding: 15px 30px;
+}
+
+header h1 {
+    float: left;
+    font-size: 24px;
+}
+
+header nav {
+    float: right;
+    margin-top: 5px;
+}
+
+header nav ul {
+    list-style: none;
+}
+
+header nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+header::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Estilos de Formulário (para login e cadastro) */
+.form-container {
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 25px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Botão */
+.btn {
+    display: inline-block;
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+/* Esta regra (@media) só será aplicada em telas com
+  largura MÁXIMA de 700 pixels (ou seja, celulares e tablets pequenos).
+*/
+
+@media screen and (max-width: 700px) {
+    
+    /* No celular, o H1 e o NAV não vão mais flutuar */
+    header h1,
+    header nav {
+        float: none;
+        text-align: center;
+    }
+
+    /* O menu vira vertical */
+    header nav ul li {
+        display: block; /* Faz cada item do menu ocupar uma linha */
+        margin: 10px 0;
+    }
+}
+
+/* O menu vira vertical */
+header nav ul li {
+    display: block; /* Faz cada item do menu ocupar uma linha */
+    margin: 10px 0;
+}
+
+/* Ajusta o espaçamento do container principal */
+.container {
+    width: 95%; /* Ocupa mais espaço da tela */
+    margin-top: 15px;
+    padding: 15px;
+}
+
+/* O container do formulário também ocupa mais espaço */
+.form-container {
+    width: 100%;
+    padding: 20px;
+}
