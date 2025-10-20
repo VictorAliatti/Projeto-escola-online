@@ -131,6 +131,65 @@ app.post('/cadastro', async (req, res) => {
 // FIM: ROTA DE CADASTRO
 // ===============================================
 
+// ===============================================
+// INÍCIO: ROTA DE LOGIN
+// ===============================================
+
+// 4.2. Rota de Login (POST /login)
+app.post('/login', async (req, res) => {
+    
+    // 1. Pegar os dados do formulário de login
+    const { email, senha } = req.body;
+    console.log('Recebida requisição de login:');
+    console.log('Email:', email);
+
+    try {
+        // 2. Procurar o usuário no banco de dados pelo e-mail
+        const consultaUsuario = await pool.query(
+            "SELECT * FROM usuarios WHERE email = $1",
+            [email]
+        );
+
+        // 3. Verificar se o usuário foi encontrado
+        // "rowCount" é o número de linhas que a consulta encontrou.
+        if (consultaUsuario.rowCount === 0) {
+            // Se não encontrou (0 linhas), o usuário não existe.
+            console.log('Tentativa de login: Usuário não encontrado.');
+            return res.status(404).json({ erro: "Usuário não encontrado." });
+        }
+
+        // 4. Se encontrou, pegar os dados do usuário
+        const usuario = consultaUsuario.rows[0];
+        
+        // 5. Comparar a senha digitada com a senha "hash" salva no banco
+        // O bcrypt.compare faz essa mágica para nós.
+        const senhaCorreta = await bcrypt.compare(senha, usuario.senha_hash);
+
+        if (!senhaCorreta) {
+            // Se a comparação falhar, as senhas não batem.
+            console.log('Tentativa de login: Senha incorreta.');
+            return res.status(401).json({ erro: "Senha incorreta." });
+        }
+
+        // 6. SUCESSO!
+        // O e-mail existe E a senha está correta.
+        console.log('Login bem-sucedido para:', usuario.email);
+
+        // Por enquanto, vamos só responder com sucesso.
+        // (Na Fase 5, aqui é onde criaríamos um "Token JWT" para
+        // manter o usuário logado)
+        res.status(200).json({ mensagem: "Login bem-sucedido!", usuario: usuario });
+
+    } catch (err) {
+        // 7. Lidar com erros inesperados
+        console.error('Erro ao fazer login:', err.message);
+        res.status(500).json({ erro: "Erro interno do servidor." });
+    }
+});
+
+// ===============================================
+// FIM: ROTA DE LOGIN
+// ===============================================
 
 // 5. "Ligar" o servidor
 app.listen(PORTA, () => {
