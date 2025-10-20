@@ -1,9 +1,7 @@
 // Este script vai rodar na página login.html
-
-const { FormData } = require("undici-types");
-
 // 1. Espera o HTML ser totalmente carregado
-document.addEventListener('DOMContentLoaded', ()=> {
+document.addEventListener('DOMContentLoaded', () => {
+
     // 2. Seleciona o formulário de login
     // Demos um ID 'login-form' para ele no HTML
     const loginForm = document.getElementById('login-form');
@@ -13,6 +11,7 @@ document.addEventListener('DOMContentLoaded', ()=> {
 
     // 4. Adiciona um "ouvinte" para o evento 'submit' (envio) do formulário
     loginForm.addEventListener('submit', async (event) => {
+        
         // 5. Impede o comportamento padrão do formulário (que é recarregar a página)
         event.preventDefault();
 
@@ -22,10 +21,10 @@ document.addEventListener('DOMContentLoaded', ()=> {
 
         // 7. Pega os dados do formulário
         // 'FormData' é uma forma moderna de pegar todos os campos
-        const FormData = new FormData(loginForm);
-
+        const formData = new FormData(loginForm);
+        
         // Converte os dados para um formato que o back-end entende
-        constdata = new URLSearchParams(formdata);
+        const data = new URLSearchParams(formData);
 
         try {
             // 8. Envia os dados para o Back-End "por debaixo dos panos"
@@ -38,9 +37,8 @@ document.addEventListener('DOMContentLoaded', ()=> {
             // 9. Converte a resposta do servidor de JSON para um objeto JavaScript
             const result = await response.json();
 
-
             // 10. Verifica se a resposta do servidor foi um erro
-            if (!responde.ok) {
+            if (!response.ok) {
                 // Se foi um erro (status 404, 401, 500...),
                 // mostra a mensagem de erro que o back-end enviou
                 messageDiv.textContent = result.erro;
@@ -57,10 +55,11 @@ document.addEventListener('DOMContentLoaded', ()=> {
                     window.location.href = 'dashboard.html';
                 }, 1000);
             }
+
         } catch (error) {
             // 13. Lidar com erros de rede (ex: back-end desligado)
-            console.error('Erro na requisição', error);
-            messageDiv.textContent = 'Não foi possivel conectar ao servidor';
+            console.error('Erro na requisição:', error);
+            messageDiv.textContent = 'Não foi possível conectar ao servidor.';
             messageDiv.className = 'message error';
         }
     });
