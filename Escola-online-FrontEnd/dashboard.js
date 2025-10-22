@@ -3,6 +3,27 @@
 
 // 1. Assim que o HTML carregar, execute a função principal 'verificarLogin'
 document.addEventListener('DOMContentLoaded', () => {
+    // ===============================================
+    // <-- INÍCIO DO NOVO CÓDIGO (1 de 3)
+    // ===============================================
+    // 1.1. Pega o link "Sair" que tem o ID 'logout-link'
+    const logoutLink = document.getElementById('logout-link');
+
+    // 1.2. Adiciona um "ouvinte" de clique nele
+    logoutLink.addEventListener('click', (event) => {
+
+        // Impede o link de navegar para 'index.html' imediatamente
+        event.preventDefault();
+
+        // Chama a nossa nova função de logout (que vamos criar abaixo)
+        fazerLogout();
+    });
+
+    // ===============================================
+    // <-- FIM DO NOVO CÓDIGO (1 de 3)
+    // ===============================================
+
+    // 1.3. Roda a verificação de segurança (esta linha já existia)
     verificarLogin();
 });
 
@@ -28,7 +49,7 @@ async function verificarLogin() {
         const response = await fetch ('http://localhost:3000/api/perfil', {
             method: "GET",
             headers:{
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer${token}`
             }
         });
 
@@ -61,3 +82,20 @@ async function verificarLogin() {
         window.location.href = 'login.html';
     }
 }
+
+// ===============================================
+// <-- INÍCIO DO NOVO CÓDIGO (2 de 3)
+// ===============================================
+// 3. Nossa nova função de Logout
+function fazerLogout() {
+    console.log('Fazendo logout... Destruindo o token.');
+    
+    // 1. Destrói o crachá (apaga o token do porta-luvas)
+    localStorage.removeItem('token');
+    
+    // 2. Redireciona para a página de login
+    window.location.href = 'login.html';
+}
+// ===============================================
+// <-- FIM DO NOVO CÓDIGO (2 de 3)
+// ===============================================

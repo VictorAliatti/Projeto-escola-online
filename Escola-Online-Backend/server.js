@@ -53,7 +53,7 @@ const jwt = require('jsonwebtoken');
 // Define uma "senha secreta" para assinar nossos crachás.
 // Isso garante que SÓ o nosso servidor pode criar crachás válidos.
 
-const JWT_SECRET = 'seu-segredo-super-secreto-12345'
+const JWT_SECRET = 'seu-segredo-super-secreto-12345';
 
 // 2. Iniciar o Express
 const app = express();
@@ -123,7 +123,7 @@ function verificarToken(req, res, next) {
 // ===============================================
 
 // 4. Criar uma "rota" de teste (vamos manter)
-app.get('/', (req, res) => {
+app.get('/api/perfil', (req, res) => {
     res.json({ mensagem: "Servidor está no ar!" });
 });
 
