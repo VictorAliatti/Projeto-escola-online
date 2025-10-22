@@ -81,6 +81,46 @@ app.use(express.urlencoded({ extended: true }));
 // FIM: MIDDLEWARES
 // ===============================================
 
+// ===============================================
+// <-- INÍCIO DO NOVO BLOCO (FASE 7)
+// ===============================================
+// Middleware de Autenticação (Nosso "Segurança")
+
+function verificarToken(req, res, next) {
+    // 1. O segurança procura o crachá no cabeçalho 'authorization'
+    const authHeader = req.headers['authorization'];
+
+    // O cabeçalho vem no formato "Bearer [token]"
+    // 'split(' ')[1]' pega só a parte do token
+    const token = authHeader && authHeader.split(' ')[1];
+
+    // 2. Se não foi enviado um crachá (token), barra a entrada
+    if (token == null) {
+        console.log('Middleware: Token não encontrado. Acesso negado');
+        return res.status(401).json({ erro:"Acesso não autorizado: token não fornecido"});
+    }
+
+    // 3. O segurança verifica a assinatura do crachá
+    jwt.verify(token, JWT_SECRET, (err, usuarioDecodificado) => {
+
+        if (err) {
+            console.log('Middleware: Token inválido!', err.message);
+            return res.status(403).jason({ erro: "Acesso proibido: token inválido ou expirado."});
+        }
+
+        // 5. SUCESSO! O crachá é válido.
+        // O segurança "carimba" a requisição com os dados do usuário
+        // para que a rota final possa usá-los.
+        req.usuario = usuarioDecodificado;
+        
+        // 6. O segurança diz: "Pode passar para a próxima etapa (a rota)"
+        next();
+    });
+}
+
+// ===============================================
+// <-- FIM DO NOVO BLOCO (FASE 7)
+// ===============================================
 
 // 4. Criar uma "rota" de teste (vamos manter)
 app.get('/', (req, res) => {
@@ -206,9 +246,10 @@ app.post('/login', async (req, res) => {
         token: token // O crachá digital!
         });
 
-        // ===============================================
+        //================================================
         // <-- FIM DA MODIFICAÇÃO (FASE 6)
         // ===============================================
+
 
     } catch (err) {
         // 7. Lidar com erros inesperados

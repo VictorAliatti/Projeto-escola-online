@@ -12,12 +12,12 @@ async function verificarLogin() {
     const token = localStorage.getItem('token');
 
     // 4. Verificação "Se NÂO houver crachá..."
-    if (!token){
+    if (!token) {
         console.log('Nenhum token encontrado. Redirecionando para login.');
         // Se não houver crachá, expulsa o usuário imediatamente
         // para a página de login.
 
-        window.localStorage.href = 'login.html';
+        window.location.href = 'login.html';
         return; // Para a execução do script
     }
 
