@@ -45,6 +45,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 messageDiv.className = 'message error';
             } else {
                 // 11. SUCESSO!
+                // A resposta do back-end (result) agora tem a 'mensagem' E o 'token'
+
+                // ===============================================
+                // INÍCIO: SALVAR O CRACHÁ 
+                // ===============================================
+
+                // Pega o token que o servidor enviou
+                
+                const token = result.token;
+
+                // Salva o token no "porta-luvas" do navegador
+                // 'localStorage' é um pequeno banco de dados do navegador
+
+                localStorage.setItem('token', token)
+
+                console.log('Token salvo no localStorahe;', token);
+                // ===============================================
+                // FIM: SALVAR O CRACHÁ
+                // ===============================================
+
+
                 // Mostra a mensagem de sucesso
                 messageDiv.textContent = result.mensagem;
                 messageDiv.className = 'message success';

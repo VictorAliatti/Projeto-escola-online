@@ -44,6 +44,17 @@ const saltRounds = 10; // "Força" da criptografia
 // FIM: NOVAS FERRAMENTAS
 // ===============================================
 
+// ===============================================
+// <-- INÍCIO DO NOVO BLOCO (FASE 6)
+// ===============================================
+// Importa a biblioteca do crachá
+
+const jwt = require('jsonwebtoken');
+// Define uma "senha secreta" para assinar nossos crachás.
+// Isso garante que SÓ o nosso servidor pode criar crachás válidos.
+
+const JWT_SECRET = 'seu-segredo-super-secreto-12345'
+
 // 2. Iniciar o Express
 const app = express();
 
@@ -77,7 +88,7 @@ app.get('/', (req, res) => {
 });
 
 // ===============================================
-// INÍCIO: ROTA DE CADASTRO (O CORAÇÃO DA FASE 4)
+// INÍCIO: ROTA DE CADASTRO 
 // ===============================================
 
 // 4.1. Rota de Cadastro (POST /cadastro)
@@ -171,14 +182,33 @@ app.post('/login', async (req, res) => {
             return res.status(401).json({ erro: "Senha incorreta." });
         }
 
+
         // 6. SUCESSO!
         // O e-mail existe E a senha está correta.
         console.log('Login bem-sucedido para:', usuario.email);
 
-        // Por enquanto, vamos só responder com sucesso.
-        // (Na Fase 5, aqui é onde criaríamos um "Token JWT" para
-        // manter o usuário logado)
-        res.status(200).json({ mensagem: "Login bem-sucedido!", usuario: usuario });
+        // 7. Criar o "Crachá" (Token)
+        const token = jwt.sign(
+            { 
+                id: usuario.id,
+                nome: usuario.nome
+            },
+            JWT_SECRET,
+            { 
+                expiresIn: '8h' // Crachá expira em 8 horas
+            } 
+        );
+
+        console.log('Token JWT criado:', token);
+
+        // 8. Enviar o Crachá (token) de volta para o Front-End
+        res.status(200).json({ mensagem: "Login bem-sucedido!",
+        token: token // O crachá digital!
+        });
+
+        // ===============================================
+        // <-- FIM DA MODIFICAÇÃO (FASE 6)
+        // ===============================================
 
     } catch (err) {
         // 7. Lidar com erros inesperados
