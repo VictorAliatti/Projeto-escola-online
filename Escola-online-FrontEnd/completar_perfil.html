@@ -43,18 +43,83 @@
                 <form id="perfil-form">
                     <fieldset>
                         <legend>Dados do Aluno</legend>
-
                         <div class="form-group">
                             <label for="cpf_aluno">CPF (do Aluno)</label>
-                            <input type="text" id="cpf_aluno" nome="cpf_aluno">
+                            <input type="text" id="cpf_aluno" name="cpf_aluno">
                         </div>
                         <div class="form-group">
-                            
+                            <label for="data_nascimento">Data de Nascimento (do Aluno)</label>
+                            <input type="date" id="data_nascimento" name="data_nascimento">
+                        </div>
+                        <div class="form-group">
+                            <label for="contato_aluno">Contato (Telefone do Aluno, se houver)</label>
+                            <input type="tel" id="contato_aluno" name="contato_aluno">
+                        </div>
+                        <div class="form-group">
+                            <label for="endereco_aluno">Endereço (do Aluno)</label>
+                            <input type="text" id="endereco_aluno" name="endereco_aluno">
+                        </div>
+                        <div class="form-group">
+                            <label for="cidade_uf_aluno">Cidade e UF (do Aluno)</label>
+                            <input type="text" id="cidade_uf_aluno" name="cidade_uf_aluno">
                         </div>
                     </fieldset>
+
+                    <fieldset>
+                        <legend>Dados Escolares</legend>
+                        <div class="form-group">
+                            <label for="tipo_escola">Estuda em escola pública ou particular?</label>
+                            <input type="text" id="tipo_escola" name="tipo_escola">
+                        </div>
+                        <div class="form-group">
+                            <label for="nome_escola">Nome da Escola em que Estuda</label>
+                            <input type="text" id="nome_escola" name="nome_escola">
+                        </div>
+                        <div class="form-group">
+                            <label for="ano_escolar"> Em qual ano/série o aluno está?</label>
+                            <input type="text" id="ano_escolar" name="ano_escolar">
+                        </div>
+                        <div class="form-group">
+                            <label for="info_importantes">Informações Importantes</label>
+                            <textarea name="info_importantes" id="info_importantes" rows="5" placeholder="Dificuldade, objetivos, metas, observações..."></textarea>
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Dados do Responsável</legend>
+                        <div class="form-group">
+                            <label for="nome_responsavel">Nome Completo (do Responsável)</label>
+                            <input type="text" id="nome_responsavel" name="nome_responsavel">
+                        </div>
+                        <div class="form-group">
+                            <label for="cpf_responsavel"> CPF (do Responsável)</label>
+                            <input type="text" id="cpf_responsavel" name="cpf_responsavel">
+                        </div>
+                        <div class="form-group">
+                            <label for="parentesco">Grau de Parentesco (Mão, Pai, Avó, etc.)</label>
+                            <input type="text" id="parentesco" name="parentesco">
+                        </div>
+                        <div class="form-group">
+                            <label for="contato_responsavel"> Contato (Telefone do Responsável)</label>
+                            <input type="tel" id="contato_responsavel" name="contato_responsavel">
+                        </div>
+                        <div class="form-group">
+                            <label for="endereco_responsavel">Endereço (do Responsável, se diferente do aluno)</label>
+                            <input type="text" id="endereco_responsavel" name="endereco_responsavel">
+                        </div>
+                        <div class="form-group">
+                            <label for="cidade_uf_responsavel">Cidade e UF (do Responsável)</label>
+                            <input type="text" id="cidade_uf_responsavel" name="cidade_uf_responsavel">
+                        </div>
+                    </fieldset>
+
+                    <button type="submit" class="btn">Salvar Matrícula</button>
                 </form>
+
+                <div id="message"></div>
             </div>
         </div>
     </main>
+    <script src="completar_perfil.js" defer></script>
 </body>
 </html>
