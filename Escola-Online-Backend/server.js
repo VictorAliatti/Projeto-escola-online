@@ -122,9 +122,42 @@ function verificarToken(req, res, next) {
 // <-- FIM DO NOVO BLOCO (FASE 7)
 // ===============================================
 
-// 4. Criar uma "rota" de teste (vamos manter)
-app.get('/api/perfil', (req, res) => {
-    res.json({ mensagem: "Servidor está no ar!" });
+// ===============================================
+// Rota Protegida da "Sala VIP" (Perfil do Usuário)
+// ===============================================
+
+// 1. Tornamos a função 'async' (assíncrona) para poder usar 'await'
+app.get('/api/perfil', verificarToken, async (req, res) => {
+    // 2. O 'verificarToken' (nosso "segurança") já rodou
+    //    e nos deu os dados do crachá em 'req.usuario'
+
+    try {
+        // 3. Vamos usar o ID do crachá para buscar o "sinalizador" no banco
+        const consultaUsuario = await pool.query(
+            "SELECT perfil_completo FROM usuarios WHERE id = $1", [req.usuario.id]
+        );
+
+        // 4. Se (por algum motivo) o usuário do crachá não for achado
+        if (consultaUsuario.rowCount === 0) {
+            return res.status(400).json({ erro:"Usuário do token não encontrado no banco de dados"});
+        }
+
+        // 5. Pegamos o "sinalizador" (true ou false)
+        const perfilCompleto = consultaUsuario.rows[0].perfil_completo;
+
+        console.log(`GET/api/perfil: Usuário ${req.usuario.nome}, Perfil Completo: ${perfilCompleto} `);
+
+        // 6. Envia TUDO (id, nome E o sinalizador) de volta para o Front-End
+        res.status(200).json({
+            id: req.usuario.id,
+            nome: req.usuario.nome,
+            perfil_completo: perfilCompleto // <-- A INFORMAÇÃO IMPORTANTE!
+        });
+        
+    }catch (err) {
+        console.error("Erro ao buscar status do perfil:", err.message);
+        res.status(500).json({ erro:"Erro interno do servidor"});
+    }
 });
 
 // ===============================================

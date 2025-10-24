@@ -65,16 +65,32 @@ async function verificarLogin() {
 
             // Expulsa o usuário
             window.location.href = 'login.html'
-        } else  {
+
+        } else {
             // 7. SUCESSO! O crachá é válido!
-            // O Back-End nos devolveu os dados do usuário
+            // O back-end nos enviou { id, nome, perfil_completo }
             const usuario = await response.json();
 
-            console.log('Token válido. Bem-vindo', usuario.name);
+            // ===============================================
+            // <-- INÍCIO DA MODIFICAÇÃO (FASE 7.H)
+            // ===============================================
+            // 7.1. O "Controlador de Tráfego"
+            // Verificamos o "sinalizador" que o Back-end nos enviou
+            if (usuario.perfil_completo === false) {
 
-            // Agora podemos, por exemplo, escrever o nome do usuário na página
-            document.getElementById('welcome-message').textContent = `Bem-vindo(a), ${usuario.name}!`;
+                // 7.2. Se for 'false', o perfil está incompleto.
+                // Redireciona para a página de matrícula.
+                console.log('Perfil incompleto. Redirecionando para completar_perfil.html ');
+                window.location.href = 'completar_perfil.html';
+            } else {
+
+                // 7.3. Se for 'true', o perfil está completo.
+                // Deixa o usuário ficar no dashboard e mostra a mensagem.
+                console.log('Token válido. Perfil completo. Bem-Vindo', usuario.nome);
+                document.getElementById('welcome-message').textContent = `Bem-vindo(a), ${usuario.nome}!`;;
+            }
         }
+        
     } catch (error) {
         // 8. Se o Back-End estiver desligado (erro de rede)
         console.error('Erro ao verificar token:', error);
@@ -82,6 +98,10 @@ async function verificarLogin() {
         window.location.href = 'login.html';
     }
 }
+
+// ===============================================
+// <-- FIM DA MODIFICAÇÃO (FASE 7.H)
+// ===============================================
 
 // ===============================================
 // <-- INÍCIO DO NOVO CÓDIGO (2 de 3)
