@@ -182,6 +182,93 @@ app.post('/cadastro', async (req, res) => {
 // FIM: ROTA DE CADASTRO
 // ===============================================
 
+
+
+// ===============================================
+// <-- INÍCIO DO NOVO BLOCO (FASE 7.F)
+// ===============================================
+// Rota para SALVAR os 17 campos do formulário de matrícula
+
+// Note que é 'app.post()' (para RECEBER dados)
+// E também é protegida pelo nosso segurança 'verificarToken'
+app.post('/api/completar-perfil', verificarToken, async (req, res) => {
+
+    // 1. Pegar o ID do usuário
+    // Graças ao 'verificarToken', nós sabemos QUEM está logado.
+    // O segurança já colocou os dados do crachá em 'req.usuario'.
+    const usuarioId = req.usuario.id;
+
+    // 2. Pegar TODOS os 17 campos do formulário
+    // O 'req.body' contém todos os <input> que o front-end enviou
+    const {
+        cpf_aluno, data_nascimento, contato_aluno, cidade_uf_aluno,
+        endereco_aluno, tipo_escola, nome_escola, ano_escola,
+        info_importantes, nome_responsavel, cpf_responsavel,
+        parentesco, contato_responsavel, endereco_responsavel,
+        cidade_uf_responsavel
+    } = req.body;
+
+    console.log(`Recebido formulário de perfil para o usuário ID: ${usuarioId}`)
+
+    // Para salvar dados em DUAS tabelas, usamos uma "Transação"
+    // Pense nisso como um "pacote seguro". Ou as duas
+    // operações dão certo, ou as duas dão errado.
+    // Isso impede um aluno de ficar "pela metade" (salvo em uma e não na outra).
+    const client = await pool.connect();
+
+    try {
+        // 3. Inicia a Transação
+        await client.query('BEGIN')
+
+        // 4. Operação 1: Inserir os 17 campos no "cofre" (aluno_detalhes)
+        // Note o 'usuario_id' sendo inserido para fazer o "gancho"
+        const sqlIsertDetalhes = `
+            INSERT INTO aluno_detalhes (
+                usuario_id, cpf_aluno, data_nascimento, contato_aluno, cidade_uf_aluno,
+                endereco_aluno, tipo_escola, nome_escola, ano_escola,
+                info_importantes, nome_responsavel, cpf_responsavel,
+                parentesco, contato_responsavel, endereco_responsavel,
+                cidade_uf_responsavel
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
+        `;
+        const valoresDetalhes = [
+            usuarioId, cpf_aluno, data_nascimento, contato_aluno, cidade_uf_aluno,
+            endereco_aluno, tipo_escola, nome_escola, ano_escola,
+            info_importantes, nome_responsavel, cpf_responsavel,
+            parentesco, contato_responsavel, endereco_responsavel,
+            cidade_uf_responsavel
+        ];
+
+        await client.query(sqlIsertDetalhes, valoresDetalhes);
+
+        // 5. Operação 2: Atualizar o "sinalizador" na tabela 'usuarios'
+        const sqlUpdateUsuario = `UPDATE usuarios 
+            SET perfil_completo = true 
+            WHERE id = $1`;
+            await client.query(sqlUpdateUsuario, [usuarioId]);
+
+        // 6. Se as duas operações deram certo, "Confirma" a transação
+        await client.query('COMMIT');
+        
+        console.log(`Perfil do usuário ID: ${usuarioId} salvo e completo.`);
+
+        // 7. Envia a resposta de sucesso para o Front-End
+        res.status(201).json({ mensagem: "Matrícula salva com sucesso! redirecionando..."});
+    } catch (err) {
+        await client.query('ROLLBLACK');
+        console.error('Erro ao salvar perfil (transação revertida):', err.message);
+        res.status(500).json({ erro:"Erro interno do servidor ao salar os dados."});
+    } finally {
+        // 9. Independente de sucesso ou falha, libera o cliente de volta
+        client.release();
+    }
+
+});
+
+// ===============================================
+// <-- FIM DO NOVO BLOCO (FASE 7.F)
+// ===============================================
+
 // ===============================================
 // INÍCIO: ROTA DE LOGIN
 // ===============================================
@@ -261,6 +348,10 @@ app.post('/login', async (req, res) => {
 // ===============================================
 // FIM: ROTA DE LOGIN
 // ===============================================
+
+
+
+
 
 // 5. "Ligar" o servidor
 app.listen(PORTA, () => {
