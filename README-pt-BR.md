@@ -123,7 +123,7 @@ Abaixo estão as rotas da API criadas no `server.js`:
 1.  **Clone the Repository**
     ```bash
     git clone [https://github.com/VictorAliatti/Projeto-escola-online.git]
-    cd [Escola-Online]
+    cd [Projeto-escola-online]
     ```
 
 2.  **Configurar o Banco de Dados (PostgreSQL)**
