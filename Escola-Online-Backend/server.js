@@ -288,7 +288,7 @@ app.post('/api/completar-perfil', verificarToken, async (req, res) => {
         // 7. Envia a resposta de sucesso para o Front-End
         res.status(201).json({ mensagem: "Matrícula salva com sucesso! redirecionando..."});
     } catch (err) {
-        await client.query('ROLLBLACK');
+        await client.query('ROLLBACK');
         console.error('Erro ao salvar perfil (transação revertida):', err.message);
         res.status(500).json({ erro:"Erro interno do servidor ao salar os dados."});
     } finally {
@@ -381,10 +381,6 @@ app.post('/login', async (req, res) => {
 // ===============================================
 // FIM: ROTA DE LOGIN
 // ===============================================
-
-
-
-
 
 // 5. "Ligar" o servidor
 app.listen(PORTA, () => {
