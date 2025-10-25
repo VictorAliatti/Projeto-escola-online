@@ -122,8 +122,8 @@ Below are the API routes created in `server.js`:
 
 1.  **Clone the Repository**
     ```bash
-    git clone [YOUR_REPO_URL]
-    cd [PROJECT_ROOT_FOLDER]
+    git clone [https://github.com/VictorAliatti/Projeto-escola-online.git]
+    cd [Escola-Online]
     ```
 
 2.  **Configure the Database (PostgreSQL)**

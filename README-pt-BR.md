@@ -120,10 +120,10 @@ Abaixo estão as rotas da API criadas no `server.js`:
 
 ## Como Executar o Projeto Localmente
 
-1.  **Clonar o Repositório**
+1.  **Clone the Repository**
     ```bash
-    git clone [URL_DO_SEU_REPOSITORIO]
-    cd [NOME_DA_PASTA_RAIZ]
+    git clone [https://github.com/VictorAliatti/Projeto-escola-online.git]
+    cd [Escola-Online]
     ```
 
 2.  **Configurar o Banco de Dados (PostgreSQL)**
